@@ -1,25 +1,21 @@
+import java.util.ArrayList;
+
 public class Carrinho {
-    private int idProduto;
-	private int quantidade;
+    private ArrayList<ItemCarrinho> itens = new ArrayList<>();
 
-    public Carrinho(int idProduto, int quantidade) {
-        this.idProduto = idProduto;
-        this.quantidade = quantidade;
+    public void adicionarItem(Produto produto, int quantidade) {
+        ItemCarrinho item = new ItemCarrinho(produto, quantidade);
+        itens.add(item);
     }
 
-	public int getIdProduto() {
-		return idProduto;
-	}
-
-    public void setIdProduto(int idProduto){
-        this.idProduto = idProduto;
-    }
-
-	public int getQuantidade() {
-		return quantidade;
-	}
-
-    public void setQuantidade(int quantidade){
-        this.quantidade = quantidade;
+    public void listarItens() {
+        if (itens.isEmpty()) {
+            System.out.println("Carrinho vazio.");
+        } else {
+            System.out.println("Itens no carrinho:");
+            for (ItemCarrinho item : itens) {
+                System.out.println(item);
+            }
+        }
     }
 }
