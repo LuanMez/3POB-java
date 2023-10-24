@@ -1,70 +1,58 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class menu {
-
-    public class Menu {
+public class Menu {
     private ArrayList<Produto> produtos = new ArrayList<>();
-    private ArrayList<Carrinho> carrinhos = new ArrayList<>();
-    private int opcao = 0;
+    private Carrinho carrinho = new Carrinho();
     private Scanner sc = new Scanner(System.in);
 
-    public void Processamento() {
-        //vendedor adicionando o produto a loja
+    public void processamento() {
+        int opcao;
         do {
-            System.out.println("1- Vendedor adicione seu Produto:");
-            if(opcao==1){
-                System.out.println("0- Finalizar ");
-            }
-
-            opcao = sc.nextInt();
-            
-            switch(opcao){
-                case 1:
-                  IncluirProduto();  
-            }
-
-        }while (opcao!=0);
-
-        //usuario selecionando o produto para comprar
-        do{
-            System.out.println("1- Usuario adicione produto ao carrinho: ");
-            if(opcao==1){
-                System.out.println("0- Finalizar o carrinho: ");
-            }
-
+            System.out.println("1- Vendedor adicione seu Produto");
+            System.out.println("2- Usuario adicione produto ao carrinho");
+            System.out.println("3- Sair e Listar o carrinho");
             opcao = sc.nextInt();
 
-            switch(opcao){
+            switch (opcao) {
                 case 1:
+                    incluirProduto();
+                    break;
+                case 2:
                     listarProdutos();
-                    IncluirCarrinho(); 
-
+                    incluirNoCarrinho();
+                    break;
+                case 3:
+                    carrinho.listarItens();
+                    opcao=3;
+                    break;
+                default:
+                    System.out.println("Opção inválida");
             }
-        }while(opcao!=0);
 
-        //achar o arraylist produto e carrinho e printar a quantidade valor e valor final
-        itensNoCarrinho(produtos, carrinhos);//verificar passar array 
+        } while (opcao != 3);
     }
 
-    public void IncluirProduto() {
-		int idProduto;
+    public void incluirProduto() {
+        int idProduto;
         String nome;
-		float preco;
-	
-		System.out.println("Digite o id do Produto: ");
-		idProduto = sc.next();
-	
-		System.out.println("Digite o nome do Produto ");
-		nome = sc.next();
-	
-		System.out.println("Digite o preco do produto: ");
-		preco = sc.next();
-	
-		Produto produto = new Produto(idProduto, nome, preco);
-		protudos.add(produto);
-		System.out.println("produto adicionado com sucesso!");
-	}
+        float preco;
+
+        System.out.println("Digite o id do Produto: ");
+        idProduto = sc.nextInt();
+
+        sc.nextLine(); // Limpar o buffer do teclado
+
+        System.out.println("Digite o nome do Produto: ");
+        nome = sc.nextLine();
+
+        System.out.println("Digite o preço do produto: ");
+        preco = sc.nextFloat();
+
+        Produto produto = new Produto(idProduto, nome, preco);
+        produtos.add(produto);
+        System.out.println("Produto adicionado com sucesso!");
+    }
 
     public void listarProdutos() {
         if (produtos.isEmpty()) {
@@ -77,36 +65,32 @@ public class menu {
         }
     }
 
-    public void IncluirCarrinho() {
-		int idProduto;
-        int quantidade;
-	
-		System.out.println("Digite o id do Produto: ");
-		idProduto = sc.next();
-	
-		System.out.println("Digite a quantidade: ");
-		quantidade = sc.next();
-	
-		Carrinho carrinho = new Produto(idProduto, quantidade);
-		carrinhos.add(carrinho);
-		System.out.println("produto adicionado ao carrinho com sucesso!");
-	}
-
-    //verificar parametro disso
-    public void itensNoCarrinho(produtos[], carrinhos[]){
-        int i;
+    public void incluirNoCarrinho() {
         int idProduto;
         int quantidade;
-        int valor;
-        for(i=0; i<tamCarrinho; i++){ //saber tamanho do carrinho
-            for(i=0; i<tamProduto; i++){ //saber tamanho do produto
-                if(produtos[i].idProduto==carrinhos[i].idProduto){
-                    //achou os iguais, agora manda para o id carrinho
-                }
+
+        System.out.println("Digite o id do Produto que deseja adicionar ao carrinho: ");
+        idProduto = sc.nextInt();
+
+        System.out.println("Digite a quantidade: ");
+        quantidade = sc.nextInt();
+
+        Produto produto = encontrarProdutoPorId(idProduto);
+
+        if (produto != null) {
+            carrinho.adicionarItem(produto, quantidade);
+            System.out.println("Produto adicionado ao carrinho com sucesso!");
+        } else {
+            System.out.println("Produto nao encontrado.");
+        }
+    }
+
+    private Produto encontrarProdutoPorId(int id) {
+        for (Produto produto : produtos) {
+            if (produto.getIdProduto() == id) {
+                return produto;
             }
         }
-        //quando finalizar printar e exibir tudo e calcular o valor final
+        return null;
     }
-}
-
 }
